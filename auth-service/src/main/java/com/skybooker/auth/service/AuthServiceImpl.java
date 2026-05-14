@@ -27,13 +27,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Locale;
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 import java.util.UUID;
 
 @Service
 @Transactional
 public class AuthServiceImpl implements AuthService {
+<<<<<<< HEAD
     private static final String ONLY_ADMIN_EMAIL = "masteradmin28@skybooker.com";
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -55,8 +61,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
+<<<<<<< HEAD
         String normalizedEmail = normalizeEmail(request.email());
 
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
         if (userRepository.existsByEmail(request.email())) {
             throw new BadRequestException("Email already registered");
         }
@@ -70,16 +79,28 @@ public class AuthServiceImpl implements AuthService {
 
         User user = new User();
         user.setFullName(request.fullName());
+<<<<<<< HEAD
         user.setEmail(normalizedEmail);
+=======
+        user.setEmail(request.email());
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setPhone(request.phone());
         user.setPassportNumber(blankToNull(request.passportNumber()));
         user.setNationality(blankToNull(request.nationality()));
+<<<<<<< HEAD
         user.setRole(resolveRegistrationRole(normalizedEmail, request.role()));
         user.setProvider(AuthProvider.LOCAL);
         user.setIsActive(true);
 
         User savedUser = normalizeAdminRole(userRepository.save(user));
+=======
+        user.setRole(request.role() == null ? Role.PASSENGER : request.role());
+        user.setProvider(AuthProvider.LOCAL);
+        user.setIsActive(true);
+
+        User savedUser = userRepository.save(user);
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
         return buildAuthResponse(savedUser);
     }
 
@@ -91,7 +112,10 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 
         if (!Boolean.TRUE.equals(user.getIsActive())) {
             throw new UnauthorizedException("Account is deactivated");
@@ -117,7 +141,10 @@ public class AuthServiceImpl implements AuthService {
         UUID userId = jwtService.extractUserId(token);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 
         boolean valid = jwtService.isTokenValid(token, user) && Boolean.TRUE.equals(user.getIsActive());
         if (!valid) {
@@ -138,7 +165,10 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findById(jwtService.extractUserId(refreshToken))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 
         if (!Boolean.TRUE.equals(user.getIsActive())) {
             throw new UnauthorizedException("Account is deactivated");
@@ -167,7 +197,10 @@ public class AuthServiceImpl implements AuthService {
     public UserResponse getUserById(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
         return mapToResponse(user);
     }
 
@@ -223,7 +256,10 @@ public class AuthServiceImpl implements AuthService {
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
+<<<<<<< HEAD
                 .map(this::normalizeAdminRole)
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
                 .map(this::mapToResponse)
                 .toList();
     }
@@ -231,6 +267,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> getUsersByRole(Role role) {
+<<<<<<< HEAD
         if (role == Role.ADMIN) {
             return userRepository.findByEmail(ONLY_ADMIN_EMAIL)
                     .map(this::normalizeAdminRole)
@@ -243,6 +280,10 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.findAllByRole(role)
                 .stream()
                 .map(this::normalizeAdminRole)
+=======
+        return userRepository.findAllByRole(role)
+                .stream()
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
                 .map(this::mapToResponse)
                 .toList();
     }
@@ -265,7 +306,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private AuthResponse buildAuthResponse(User user) {
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
         return new AuthResponse(
                 user.getUserId(),
                 user.getFullName(),
@@ -296,7 +340,10 @@ public class AuthServiceImpl implements AuthService {
         UUID userId = jwtService.extractUserId(token);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+<<<<<<< HEAD
         user = normalizeAdminRole(user);
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 
         if (tokenBlacklistService.isBlacklisted(token) || !jwtService.isTokenValid(token, user)) {
             throw new UnauthorizedException("Invalid token");
@@ -314,6 +361,7 @@ public class AuthServiceImpl implements AuthService {
     private String blankToNull(String value) {
         return value == null || value.isBlank() ? null : value;
     }
+<<<<<<< HEAD
 
     private Role resolveRegistrationRole(String email, Role requestedRole) {
         if (isOnlyAdminEmail(email)) {
@@ -355,5 +403,7 @@ public class AuthServiceImpl implements AuthService {
     private String normalizeEmail(String email) {
         return email == null ? "" : email.trim().toLowerCase(Locale.ROOT);
     }
+=======
+>>>>>>> 75d3a73636404cb9081151e4a9c9e9e616ffc034
 }
 
