@@ -1,0 +1,5 @@
+com\skybooker\api\ApiGatewayApplication.class
+com\skybooker\api\filter\AuthenticationFilter.class
+com\skybooker\api\config\OpenApiConfig.class
+com\skybooker\api\filter\RouteValidator.class
+com\skybooker\api\util\JwtUtil.class

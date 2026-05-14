@@ -1,0 +1,80 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: payment-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/skybooker_payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    username: root
+    password: root123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: basic
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+application:
+  security:
+    jwt:
+      secret-key: VGhpc0lzQVN1ZmZpY2llbnRseUxvbmdTYW1wbGVCYXNlNjRLZXlGb3JTa3lCb29rZXI=
+  payment:
+    provider: RAZORPAY
+    currency: INR
+    mock-mode: false
+    receipt-base-url: http://localhost:8087/payments/receipt
+    razorpay:
+      key-id: rzp_test_SgpSVTkjZF01RU
+      key-secret: 0F3JJu5Zo5oOqVc7awtBHQFu
+  rabbitmq:
+    payment-exchange: skybooker.payment.exchange
+    payment-routing-key: payment.completed
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha

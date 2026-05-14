@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.skybooker.seat.service.SeatServiceImplTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.11 s -- in com.skybooker.seat.service.SeatServiceImplTest
