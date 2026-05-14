@@ -3,6 +3,12 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+# --- MUST for Maven multi-module ---
+**/target/
+**/*.jar
+
+# Maven wrapper (keep)
+!.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
